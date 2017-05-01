@@ -14,5 +14,10 @@ sudo make install
 # Docker installation (Debian)
 https://docs.docker.com/engine/installation/linux/debian/#install-using-the-repository
 
+# Docker bild
+sudo docker build -t <name> <folder>
+
 # Running docker:
 sudo docker run -p yourport:80 <name>
+
+# 

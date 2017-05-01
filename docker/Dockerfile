@@ -1,20 +1,25 @@
-# Use an official Python runtime as a base image
 FROM python:2.7-slim
 
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-ADD . /app
+# Needs autogeneration
+ADD honeyd.conf /app
+ADD Honeyd/ /app
 
-# Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt
+RUN apt-get update 
+RUN apt-get install -y git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake git zlib1g-dev make
+RUN mv configure.in configure.ac
+RUN ./autogen.sh
+RUN ./configure
+RUN make 
+RUN make install 
+RUN mkdir /app/logs
+RUN touch "/app/logs/test.log"
+RUN ls -alh /app
+RUN ip a
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Ports
+EXPOSE 445
 
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["honeyd", "-d", "-i", "eth0"]
+#"-d", "-f", "honeyd.conf", "-l", "/app/logs/test.log"]
