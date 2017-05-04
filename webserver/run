@@ -1,0 +1,2 @@
+#!/bin/sh
+docker run --name webserver -p "1337:80" -d nginx
